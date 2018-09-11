@@ -4,6 +4,17 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center"
+        android:text="欢迎来到迷宫小游戏~"
+        android:textSize="24sp"
+        android:textStyle="bold|italic" />
+
     <View
         android:id="@+id/view"
         android:layout_width="match_parent"

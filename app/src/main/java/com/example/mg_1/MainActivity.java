@@ -5,6 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -18,6 +22,8 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class MainActivity extends Activity {
+    private Handler mHandler=new Handler() {};
+    private int x=0;
     private int[][] maze;//迷宫矩阵
     private int[][] maze1;//是否访问
     private stack street;
@@ -66,71 +72,221 @@ public class MainActivity extends Activity {
         final Button bt6=(Button)findViewById(R.id.bt6);
 
 
-        bt1.setOnClickListener(new View.OnClickListener() {
+//        bt1.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(h>0&&maze[h-1][z]==1){
+//
+//                    updateSingle(h*51+z,R.drawable.road);
+//                    updateSingle(h*51-51+z,R.drawable.greed);
+//                    h--;
+//                    if(h==50&&z==50)
+//                        showExitDialog01();
+//                }
+//
+//
+//            }
+//        });
+        bt1.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                if(h>0&&maze[h-1][z]==1){
-//                    ((HashMap)lst.get(h*51+z)).put("ItemImg", R.drawable.road);
-//                    ((HashMap)lst.get(h*51-51+z)).put("ItemImg", R.drawable.greed);
-//                    simpleAdapter.notifyDataSetChanged();
-                    updateSingle(h*51+z,R.drawable.road);
-                    updateSingle(h*51-51+z,R.drawable.greed);
-                    h--;
-                    if(h==50&&z==50)
-                        showExitDialog01();
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+
+                    x=0;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (x==0) {
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(h>0&&maze[h-1][z]==1){
+
+                                            updateSingle(h*51+z,R.drawable.road);
+                                            updateSingle(h*51-51+z,R.drawable.greed);
+                                            h--;
+                                            if(h==50&&z==50)
+                                                showExitDialog01();
+                                        }
+                                    }
+                                });
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }).start();
+
+                }else if(event.getAction() == MotionEvent.ACTION_UP){
+
+                    x=1;
                 }
-
-
+                return false;
             }
         });
-        bt2.setOnClickListener(new View.OnClickListener() {
+
+
+//        bt2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(z>0&&maze[h][z-1]==1){
+//                    updateSingle(h*51+z,R.drawable.road);
+//                    updateSingle(h*51-1+z,R.drawable.greed);
+//                    z--;
+//                    if(h==50&&z==50)
+//                        showExitDialog01();
+//
+//                }
+//
+//            }
+//        });
+
+        bt2.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                if(z>0&&maze[h][z-1]==1){
-//                    ((HashMap)lst.get(h*51+z)).put("ItemImg", R.drawable.road);
-//                    ((HashMap)lst.get(h*51-1+z)).put("ItemImg", R.drawable.greed);
-//                    simpleAdapter.notifyDataSetChanged();
-                    updateSingle(h*51+z,R.drawable.road);
-                    updateSingle(h*51-1+z,R.drawable.greed);
-                    z--;
-                    if(h==50&&z==50)
-                        showExitDialog01();
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
 
+                    x=0;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (x==0) {
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (z > 0 && maze[h][z - 1] == 1) {
+                                            updateSingle(h * 51 + z, R.drawable.road);
+                                            updateSingle(h * 51 - 1 + z, R.drawable.greed);
+                                            z--;
+                                            if (h == 50 && z == 50)
+                                                showExitDialog01();
+
+                                        }
+                                    }
+                                });
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }).start();
+
+                }else if(event.getAction() == MotionEvent.ACTION_UP){
+
+                    x=1;
                 }
-
+                return false;
             }
         });
-        bt3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(z!=50&&maze[h][z+1]==1){
-//                    ((HashMap)lst.get(h*51+z)).put("ItemImg", R.drawable.road);
-//                    ((HashMap)lst.get(h*51+1+z)).put("ItemImg", R.drawable.greed);
-//                    simpleAdapter.notifyDataSetChanged();
-                    updateSingle(h*51+z,R.drawable.road);
-                    updateSingle(h*51+1+z,R.drawable.greed);
-                    z++;
-                    if(h==50&&z==50)
-                        showExitDialog01();
-                }
-            }
-        });
-        bt4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(h!=50&&maze[h+1][z]==1){
-//                    ((HashMap)lst.get(h*51+z)).put("ItemImg", R.drawable.road);
-//                    ((HashMap)lst.get(h*51+51+z)).put("ItemImg", R.drawable.greed);
-//                    simpleAdapter.notifyDataSetChanged();
-                    updateSingle(h*51+z,R.drawable.road);
-                    updateSingle(h*51+51+z,R.drawable.greed);
-                    h++;
-                    if(h==50&&z==50)
-                        showExitDialog01();
-                }
 
+
+//        bt3.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(z!=50&&maze[h][z+1]==1){
+//
+//                    updateSingle(h*51+z,R.drawable.road);
+//                    updateSingle(h*51+1+z,R.drawable.greed);
+//                    z++;
+//                    if(h==50&&z==50)
+//                        showExitDialog01();
+//                }
+//            }
+//        });
+        bt3.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    x=0;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (x==0) {
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(z!=50&&maze[h][z+1]==1){
+
+                                            updateSingle(h*51+z,R.drawable.road);
+                                            updateSingle(h*51+1+z,R.drawable.greed);
+                                            z++;
+                                            if(h==50&&z==50)
+                                                showExitDialog01();
+                                        }
+                                    }
+                                });
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }).start();
+
+                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                    x=1;
+                }
+                return false;
             }
         });
+
+
+//
+//        bt4.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(h!=50&&maze[h+1][z]==1){
+//                    updateSingle(h*51+z,R.drawable.road);
+//                    updateSingle(h*51+51+z,R.drawable.greed);
+//                    h++;
+//                    if(h==50&&z==50)
+//                        showExitDialog01();
+//                }
+//
+//            }
+//        });
+        bt4.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    x=0;
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (x==0) {
+                                mHandler.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if(h!=50&&maze[h+1][z]==1){
+                                            updateSingle(h*51+z,R.drawable.road);
+                                            updateSingle(h*51+51+z,R.drawable.greed);
+                                            h++;
+                                            if(h==50&&z==50)
+                                                showExitDialog01();
+                                        }
+                                    }
+                                });
+                                try {
+                                    Thread.sleep(300);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }).start();
+
+                }else if(event.getAction() == MotionEvent.ACTION_UP){
+                    x=1;
+                }
+                return false;
+            }
+        });
+
         bt5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
